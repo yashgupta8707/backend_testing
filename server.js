@@ -1,21 +1,22 @@
-  const express = require("express");
-  const mongoose = require("mongoose");
-  const dotenv = require("dotenv");
-  const cors = require("cors");
-  const bodyParser = require("body-parser");
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
-  // ✅ Load environment variables
-  dotenv.config();
+// ✅ Load environment variables
+dotenv.config();
 
-  const app = express();
-  const PORT = process.env.PORT || 5000;
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-  app.use(cors());
-  app.use(bodyParser.json());
-
+app.use(cors());
+app.use(bodyParser.json());
+const helmet = require("helmet");
+app.use(helmet());
 
 // ✅ Enable Debug Mode for MongoDB
-mongoose.set('debug', true);
+mongoose.set("debug", true);
 
 // ✅ Connect to MongoDB
 const connectDB = async () => {
@@ -30,24 +31,23 @@ const connectDB = async () => {
   }
 };
 
-  // ✅ Import Routes (Only Once)
-  const authRoutes = require("./routes/authRoutes"); 
-  const candidateRoutes = require("./routes/CandidateRoutes");
-  const contactRoutes = require("./routes/ContactRoutes");
-  const enquiryRoutes = require("./routes/EnquiryRoutes");
-  const registeredRoute = require("./routes/RegisteredForm");
+// ✅ Import Routes (Only Once)
+const authRoutes = require("./routes/authRoutes");
+const candidateRoutes = require("./routes/CandidateRoutes");
+const contactRoutes = require("./routes/ContactRoutes");
+const enquiryRoutes = require("./routes/EnquiryRoutes");
+const registeredRoute = require("./routes/RegisteredForm");
 
-  // ✅ Define Routes
-  app.use("/api/auth", authRoutes); 
-  app.use("/api/potentialCandidates", candidateRoutes);
-  app.use("/api/contact", contactRoutes);
-  app.use("/api/enquiries", enquiryRoutes);
-  app.use("/api/registrationThroughForm", registeredRoute);
+// ✅ Define Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/potentialCandidates", candidateRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/enquiries", enquiryRoutes);
+app.use("/api/registrationThroughForm", registeredRoute);
 
-
-  app.get("/", (req, res) => {
-    res.send("Hello MERN!");
-  });
+app.get("/", (req, res) => {
+  res.send("Hello MERN!");
+});
 
 // Connect to DB first, then start the server
 connectDB().then(() => {
